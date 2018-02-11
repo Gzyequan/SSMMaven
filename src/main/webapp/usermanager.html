@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>test</title>
-    <!--<script src="/js/jquery-3.0.0.js"></script>-->
     <script src="js/jquery-3.0.0.min.js"></script>
+    <script src="js/PublicMethods.js"></script>
 </head>
 <script type="text/javascript">
     function selectUser() {
         var userKey = document.getElementById("userKey").value;
+        console.log(getCookie("authentication"));
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "user/showUser.do",
-            contentType: 'application/json;charset=utf-8',
+            contentType: "application/json;charset=utf-8",
             data: {id: userKey},
             async: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("authentication", getCookie("authentication"));
+            },
             success: function (result) {
                 if (result.code == 1) {
                     $("#infoOut").text("name: " + result.data[0].username + "  email: " + result.data[0].email);
                 } else {
                     $("#infoOut").text(result.reason);
+                    window.location.href = "login.html";
                 }
             },
             error: function () {
@@ -70,11 +75,15 @@
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify(user),
             async: true,
+            beforeSend: function (request) {
+                request.setRequestHeader("authentication", getCookie("authentication"));
+            },
             success: function (result) {
                 if (result.code == 1) {
                     $("#infoOut").text("添加成功");
                 } else {
                     $("#infoOut").text(result.reason);
+                    window.location.href = "login.html";
                 }
             },
             error: function () {
@@ -91,16 +100,14 @@
 <button type="button" onclick="selectUser()">查询用户</button>
 <button id="btnAddUser" onclick="showAddBox()">添加用户</button>
 <div id="addUserBox" style="display: none">
-    <form id="addUserForm">
-        <input id="email" type="text" placeholder="邮箱">
-        <input id="username" type="text" placeholder="用户名">
-        <input id="password" type="password" placeholder="密码">
-        <select id="role" onchange="selectRole()">
-            <option value="consumer">普通用户</option>
-            <option value="root">超级管理员</option>
-        </select>
-        <input type="button" onclick="addOneUser()" value="保存">
-    </form>
+    <input id="email" type="text" placeholder="邮箱">
+    <input id="username" type="text" placeholder="用户名">
+    <input id="password" type="password" placeholder="密码">
+    <select id="role" onchange="selectRole()">
+        <option value="consumer">普通用户</option>
+        <option value="root">超级管理员</option>
+    </select>
+    <input type="button" onclick="addOneUser()" value="保存">
 </div>
 </body>
 </html>

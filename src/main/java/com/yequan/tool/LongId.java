@@ -1,4 +1,4 @@
-package exercisesdb.common;
+package com.yequan.tool;
 
 import java.util.Calendar;
 import java.util.Random;

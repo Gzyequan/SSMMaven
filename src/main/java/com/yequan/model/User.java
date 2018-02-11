@@ -1,5 +1,6 @@
 package com.yequan.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
@@ -65,8 +66,14 @@ public class User {
         return regTime;
     }
 
-    public void setRegTime(Date regTime) {
-        this.regTime = regTime;
+    public void setRegTime(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            this.regTime = format.parse(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public String getRegIp() {

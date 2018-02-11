@@ -14,12 +14,22 @@ public class UserServiceImpl implements IUserService {
     private IUserDao userDao;
 
     @Override
-    public User selectUser(long id) {
-        return this.userDao.selectUser(id);
+    public User selectUserId(long id) {
+        return this.userDao.selectUserById(id);
+    }
+
+    @Override
+    public User selectUserByEmail(String email) {
+        return userDao.selectUserByEmail(email);
     }
 
     @Override
     public boolean addOneUser(User user) {
         return this.userDao.addOneUser(user);
+    }
+
+    @Override
+    public User checkEmailAndPassword(String email, String password) {
+        return this.userDao.checkEmailAndPassword(email, password);
     }
 }

@@ -8,7 +8,33 @@
 </head>
 
 <script type="text/javascript">
-    function login() {
+
+    //ajax提交信息
+    function uploadImg() {
+        if ($("#file").val() != "") {
+            $.ajaxFileUpload({
+                type: "POST",
+                url: "file/uploadFile.do",
+                dataType: "json",
+                fileElementId: "file",  // 文件的id
+                success: function (result) {
+                    if (result.code == 1) {
+                        //alert("上传成功");
+                        //图片显示
+                        $("#avatar").attr("value", result.data.url);
+                        $("#avatarShow").attr("src", result.data.url);
+                    }
+                },
+                error: function () {
+                    alert("上传失败");
+                }
+            });
+        } else {
+            alert("请先选择文件");
+        }
+    }
+
+    function register() {
         var emailV = document.getElementById("email").value;
         var passwordV = document.getElementById("password").value;
         var user = {
@@ -40,9 +66,15 @@
 <body>
 <div>
     <form>
+        <input type="file" name="file" id="file" onchange="uploadImg()">
+        <input type="hidden" name="avatar" id="avatar">
+        <img src="" alt="" id="avatarShow" width="100px" height="100px">
         <input id="email" type="email" placeholder="邮箱">
         <input id="password" type="password" placeholder="密码">
-        <input type="button" onclick="login()" value="登录">
+        <input type="button" onclick="register()" value="注册">
+        <a href="register.html">
+            <button>已有帐号，前往登录</button>
+        </a>
     </form>
 </div>
 </body>
