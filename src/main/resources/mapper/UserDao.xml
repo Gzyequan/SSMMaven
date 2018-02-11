@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yequan.dao.IUserDao">
+    <select id="selectUser" resultType="com.yequan.model.User" parameterType="long">
+        SELECT * FROM USER WHERE id = #{id}
+    </select>
+    <insert id="addOneUser" parameterType="com.yequan.model.User">
+        INSERT INTO user(id,email,password,username,role,status,regTime,regIp) values
+        (#{id},#{email},#{password},#{username},#{role},#{status},#{regTime},#{regIp})
+    </insert>
+</mapper>

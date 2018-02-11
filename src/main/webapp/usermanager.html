@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <!--<script src="/js/jquery-3.0.0.js"></script>-->
+    <script src="js/jquery-3.0.0.min.js"></script>
+</head>
+<script type="text/javascript">
+    function selectUser() {
+        var userKey = document.getElementById("userKey").value;
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "user/showUser.do",
+            contentType: 'application/json;charset=utf-8',
+            data: {id: userKey},
+            async: true,
+            success: function (result) {
+                if (result.code == 1) {
+                    $("#infoOut").text("name: " + result.data[0].username + "  email: " + result.data[0].email);
+                } else {
+                    $("#infoOut").text(result.reason);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+    var addFlag = false;
+
+    function showAddBox() {
+        var btnAddUser = document.getElementById("btnAddUser");
+        var addUser = document.getElementById("addUserBox");
+        if (!addFlag) {
+            addUser.style.display = "block";
+            btnAddUser.value = "隐藏";
+            addFlag = true;
+        } else {
+            addUser.style.display = "none";
+            btnAddUser.value = "添加用户";
+            addFlag = false;
+        }
+    }
+
+    var roleV = "consumer";
+
+    function selectRole() {
+        var selectBox = document.getElementById("role");
+        roleV = selectBox.options[selectBox.selectedIndex].value;
+    }
+
+    function addOneUser() {
+        var emailV = document.getElementById("email").value;
+        var usernameV = document.getElementById("username").value;
+        var passwordV = document.getElementById("password").value;
+        var user = {
+            email: emailV,
+            username: usernameV,
+            password: passwordV,
+            role: roleV
+        };
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "user/addOneUser.do",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(user),
+            async: true,
+            success: function (result) {
+                if (result.code == 1) {
+                    $("#infoOut").text("添加成功");
+                } else {
+                    $("#infoOut").text(result.reason);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+</script>
+<body>
+<p>信息输出：</p>
+<p id="infoOut"></p>
+<input type="text" placeholder="用户ID" id="userKey"/>
+<button type="button" onclick="selectUser()">查询用户</button>
+<button id="btnAddUser" onclick="showAddBox()">添加用户</button>
+<div id="addUserBox" style="display: none">
+    <form id="addUserForm">
+        <input id="email" type="text" placeholder="邮箱">
+        <input id="username" type="text" placeholder="用户名">
+        <input id="password" type="password" placeholder="密码">
+        <select id="role" onchange="selectRole()">
+            <option value="consumer">普通用户</option>
+            <option value="root">超级管理员</option>
+        </select>
+        <input type="button" onclick="addOneUser()" value="保存">
+    </form>
+</div>
+</body>
+</html>
